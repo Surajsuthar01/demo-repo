@@ -1,29 +1,14 @@
-# this yml file for the copy the content of the github repository to the webserver and restart the service
----
-- name: Upload new code and Restart the service
-  hosts: all
-  become: true  # Elevates privileges for all tasks
-
-  vars:
-    app: httpd
-
+- hosts: all
+  become: yes
   tasks:
-    - name: Copy custom HTML files
-      copy:
-        src: "/var/lib/jenkins/workspace/website/"
-        dest: "/var/www/html"
-        owner: apache
-        group: apache
-      with_fileglob:
-        - "/var/lib/jenkins/workspace/website/*"
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+        update_cache: yes
 
-    - name: Restart the HTTPD service
+    - name: Start Docker service
       service:
-        name: "{{ app }}"
-        state: restarted
-
-    - name: Enable HTTPD to start on boot
-      service:
-        name: "{{ app }}"
+        name: docker
+        state: started
         enabled: yes
-
