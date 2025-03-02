@@ -10,12 +10,12 @@
   tasks:
     - name: Copy custom HTML files
       copy:
-        src: "/var/lib/jenkins/workspace/webserver/"
+        src: "/var/lib/jenkins/workspace/website/"
         dest: "/var/www/html"
         owner: apache
         group: apache
       with_fileglob:
-        - "/var/lib/jenkins/workspace/webserver/*"
+        - "/var/lib/jenkins/workspace/website/*"
 
     - name: Restart the HTTPD service
       service:
