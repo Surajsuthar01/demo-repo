@@ -1,14 +1,17 @@
-- hosts: all
+- name: Deploy Docker Container
+  hosts: all
   become: yes
   tasks:
-    - name: Install Docker
-      apt:
-        name: docker.io
-        state: present
-        update_cache: yes
+    - name: Pull the Docker image
+      docker_image:
+        name: my-web-app
+        source: pull
+        tag: latest
 
-    - name: Start Docker service
-      service:
-        name: docker
+    - name: Run the Docker container
+      docker_container:
+        name: my-web-app
+        image: my-web-app:latest
+        ports:
+          - "80:80"
         state: started
-        enabled: yes
