@@ -1,6 +1,6 @@
 ---
 - name: Deploy HTTPD Container
-  hosts: remote
+  hosts: all
   become: yes
   tasks:
     - name: Pull the latest image
