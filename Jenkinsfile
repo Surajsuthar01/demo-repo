@@ -1,21 +1,34 @@
 pipeline {
     agent any
+
     stages {
-        stage('Checkout') {
+        stage('Clone Repository') {
             steps {
-                git branch: 'main', url: 'https://github.com/Surajsuthar01/surajlogistic.git'
+                git branch: 'main', url: 'https://github.com/Surajsuthar01/demo-repo.git'
             }
         }
+
         stage('Build Docker Image') {
             steps {
-                sh 'sudo docker build -t my-app .'
+                sh 'docker build -t my-httpd .'
             }
         }
-        stage('Deploy Docker Container') {
+
+        stage('Save Docker Image as Tar') {
             steps {
-                sh 'sudo docker stop my-app || true'
-                sh 'sudo docker rm my-app || true'
-                sh 'sudo docker run -d -p 80:80 --name my-app my-app'
+                sh 'docker save -o my-httpd.tar my-httpd'
+            }
+        }
+
+        stage('Copy Docker Image to Remote') {
+            steps {
+                sh 'scp my-httpd.tar root@192.168.80.137:/tmp/'
+            }
+        }
+
+        stage('Load Image and Deploy via Ansible') {
+            steps {
+                sh 'ansible-playbook -i /etc/ansible/hosts deploy.yml'
             }
         }
     }
