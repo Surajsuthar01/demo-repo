@@ -1,11 +1,3 @@
-# Use an official Nginx image as the base image
-FROM nginx:alpine
-
-# Copy the application files to the Nginx web root
-COPY . /usr/share/nginx/html
-
-# Expose port 80
+FROM httpd:latest
+COPY index.html /usr/local/apache2/htdocs/index.html
 EXPOSE 80
-
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
