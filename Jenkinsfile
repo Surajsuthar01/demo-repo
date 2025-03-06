@@ -1,35 +1,56 @@
 pipeline {
     agent any
 
+    environment {
+        DOCKER_IMAGE = "httpd"
+        DOCKER_TAG = "latest"
+        ANSIBLE_INVENTORY = "etc/ansible/inventory"  // Relative path to your inventory file in the workspace
+    }
+
     stages {
-        stage('Clone Repository') {
+        stage('Checkout Code') {
             steps {
+                // Checkout the code from GitHub
                 git branch: 'main', url: 'https://github.com/Surajsuthar01/demo-repo.git'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t my-httpd .'
+                script {
+                    // Build the Docker image
+                    sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
+                }
             }
         }
 
-        stage('Save Docker Image as Tar') {
+        stage('Push Docker Image (Optional)') {
             steps {
-                sh 'docker save -o my-httpd.tar my-httpd'
+                script {
+                    // If you have a Docker registry, you can push the image here
+                    // sh "docker login -u your-username -p your-password your-registry"
+                    // sh "docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} your-registry/${DOCKER_IMAGE}:${DOCKER_TAG}"
+                    // sh "docker push your-registry/${DOCKER_IMAGE}:${DOCKER_TAG}"
+                }
             }
         }
 
-        stage('Copy Docker Image to Remote') {
+        stage('Deploy with Ansible') {
             steps {
-                sh 'scp my-httpd.tar root@192.168.80.137:/tmp/'
+                script {
+                    // Run the Ansible playbook to deploy the container
+                    sh "ansible-playbook -i ${ANSIBLE_INVENTORY} ansible/deploy.yml"
+                }
             }
         }
+    }
 
-        stage('Load Image and Deploy via Ansible') {
-            steps {
-                sh 'ansible-playbook -i /etc/ansible/hosts deploy.yml'
-            }
+    post {
+        success {
+            echo 'Deployment successful!'
+        }
+        failure {
+            echo 'Deployment failed!'
         }
     }
 }
