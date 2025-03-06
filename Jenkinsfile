@@ -39,7 +39,7 @@ pipeline {
         stage('Deploy with Ansible') {
             steps {
                 // Run the Ansible playbook to deploy the container
-                sh "ansible-playbook -i ${ANSIBLE_INVENTORY} ansible/deploy.yml"
+                sh "ansible-playbook -i ${ANSIBLE_INVENTORY} deploy.yml"
             }
         }
     }
