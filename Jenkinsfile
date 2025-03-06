@@ -22,19 +22,19 @@ pipeline {
             }
         }
 
-        stage('Push Docker Image (Optional)') {
-            steps {
+      //  stage('Push Docker Image (Optional)') {
+          //  steps {
                 // Optional: Push the Docker image to a registry
-                script {
+               // script {
                     // Uncomment and configure the following lines if you have a Docker registry
                     // withCredentials([usernamePassword(credentialsId: 'docker-registry-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     //     sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin your-registry-url"
                     //     sh "docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} your-registry-url/${DOCKER_IMAGE}:${DOCKER_TAG}"
                     //     sh "docker push your-registry-url/${DOCKER_IMAGE}:${DOCKER_TAG}"
                     // }
-                }
-            }
-        }
+             //   }
+         //   }
+      //  }
 
         stage('Deploy with Ansible') {
             steps {
