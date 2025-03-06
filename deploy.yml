@@ -1,0 +1,41 @@
+---
+- name: Deploy HTTPD Container
+  hosts: all
+  become: yes
+  tasks:
+    - name: Ensure Docker is installed
+      package:
+        name: docker.io
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Ensure Docker is installed (for RedHat-based systems)
+      package:
+        name: docker
+        state: present
+      when: ansible_os_family == "RedHat"
+
+    - name: Ensure Docker is installed (for Alpine-based systems)
+      package:
+        name: docker
+        state: present
+      when: ansible_os_family == "Alpine"
+
+    - name: Pull the latest httpd image
+      docker_image:
+        name: httpd
+        source: pull
+
+    - name: Stop and remove existing container
+      docker_container:
+        name: suraj
+        state: absent
+
+    - name: Run HTTPD container
+      docker_container:
+        name: suraj
+        image: httpd
+        state: started
+        restart_policy: always
+        published_ports:
+          - "80:80"
