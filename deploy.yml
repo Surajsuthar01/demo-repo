@@ -1,23 +1,14 @@
----
-- name: Deploy HTTPD Container
-  hosts: all
+- hosts: all
   become: yes
   tasks:
-    - name: Pull the latest image
-      docker_image:
-        name: httpd
-        source: local
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+        update_cache: yes
 
-    - name: Stop and remove existing container
-      docker_container:
-        name: suraj
-        state: absent
-
-    - name: Run HTTPD container
-      docker_container:
-        name: suraj
-        image: httpd
+    - name: Start Docker service
+      service:
+        name: docker
         state: started
-        restart_policy: always
-        published_ports:
-          - "80:80"
+        enabled: yes
