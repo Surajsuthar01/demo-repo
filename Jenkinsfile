@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = "httpd"
-        DOCKER_TAG = "latest"
-        ANSIBLE_INVENTORY = "etc/ansible/inventory"  // Relative path to your inventory file in the workspace
+        DOCKER_IMAGE = "httpd"  // Name of the Docker image
+        DOCKER_TAG = "latest"    // Tag for the Docker image
+        ANSIBLE_INVENTORY = "etc/ansible/inventory"  // Path to the Ansible inventory file
     }
 
     stages {
@@ -17,30 +17,29 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    // Build the Docker image
-                    sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
-                }
+                // Build the Docker image
+                sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
             }
         }
 
         stage('Push Docker Image (Optional)') {
             steps {
+                // Optional: Push the Docker image to a registry
                 script {
-                    // If you have a Docker registry, you can push the image here
-                    // sh "docker login -u your-username -p your-password your-registry"
-                    // sh "docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} your-registry/${DOCKER_IMAGE}:${DOCKER_TAG}"
-                    // sh "docker push your-registry/${DOCKER_IMAGE}:${DOCKER_TAG}"
+                    // Uncomment and configure the following lines if you have a Docker registry
+                    // withCredentials([usernamePassword(credentialsId: 'docker-registry-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    //     sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin your-registry-url"
+                    //     sh "docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} your-registry-url/${DOCKER_IMAGE}:${DOCKER_TAG}"
+                    //     sh "docker push your-registry-url/${DOCKER_IMAGE}:${DOCKER_TAG}"
+                    // }
                 }
             }
         }
 
         stage('Deploy with Ansible') {
             steps {
-                script {
-                    // Run the Ansible playbook to deploy the container
-                    sh "ansible-playbook -i ${ANSIBLE_INVENTORY} ansible/deploy.yml"
-                }
+                // Run the Ansible playbook to deploy the container
+                sh "ansible-playbook -i ${ANSIBLE_INVENTORY} ansible/deploy.yml"
             }
         }
     }
