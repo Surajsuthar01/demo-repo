@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = "httpd"  // Name of the Docker image
         DOCKER_TAG = "latest"    // Tag for the Docker image
-        ANSIBLE_INVENTORY = "inventory"  // Path to the Ansible inventory file
+        ANSIBLE_INVENTORY = "/etc/ansible/hosts"  // Path to the Ansible inventory file
     }
 
     stages {
