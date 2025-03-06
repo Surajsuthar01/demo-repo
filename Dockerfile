@@ -2,7 +2,7 @@
 FROM httpd:2.4
 
 # Copy the index.html file to the Apache document root
-COPY var/lib/jenkins/workspace/docker-demo/index.html /usr/local/apache2/htdocs/
+COPY index.html /usr/local/apache2/htdocs/
 
 # Expose port 80
 EXPOSE 80
