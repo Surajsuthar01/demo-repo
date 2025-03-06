@@ -1,0 +1,4 @@
+[webservers]
+192.168.80.137 ansible_ssh_user=root ansible_ssh_private_key_file=/root/.ssh/id_rsa
+192.168.80.136 ansible_ssh_user=root ansible_ssh_private_key_file=/root/.ssh/id_rsa
+
