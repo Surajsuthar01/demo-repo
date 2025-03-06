@@ -1,11 +1,10 @@
-# Use the official httpd image as the base image
-FROM httpd:2.4
+FROM nginx:alpine
 
-# Copy the index.html file to the Apache document root
-COPY index.html /usr/local/apache2/htdocs/
+# Copy the application files to the Nginx web root
+COPY . /usr/share/nginx/html
 
 # Expose port 80
 EXPOSE 80
 
-# Start the Apache server
-CMD ["httpd-foreground"]
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"]
