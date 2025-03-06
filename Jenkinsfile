@@ -1,12 +1,27 @@
 pipeline {
     agent any
 
+    
+    stages {
+        stage('Checkout Code') {
+            steps {
+                // Checkout the code from GitHub
+                git branch: 'main', url: 'https://github.com/Surajsuthar01/demo-repo.git'
+            }
+        }
+    
+    
+    
     environment {
         DOCKER_IMAGE = "httpd"  // Name of the Docker image
         DOCKER_TAG = "latest"    // Tag for the Docker image
         ANSIBLE_INVENTORY = "etc/ansible/inventory"  // Path to the Ansible inventory file
     }
 
+    
+    
+    
+    
     stages {
         stage('Checkout Code') {
             steps {
