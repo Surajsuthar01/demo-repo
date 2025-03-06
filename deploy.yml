@@ -5,18 +5,18 @@
   tasks:
     - name: Pull the latest image
       docker_image:
-        name: my-httpd
+        name: httpd
         source: local
 
     - name: Stop and remove existing container
       docker_container:
-        name: httpd_container
+        name: suraj
         state: absent
 
     - name: Run HTTPD container
       docker_container:
-        name: httpd_container
-        image: my-httpd
+        name: suraj
+        image: httpd
         state: started
         restart_policy: always
         published_ports:
